@@ -11,9 +11,9 @@ import 'package:langchain_pinecone/langchain_pinecone.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 
 final langchainServiceProvider = Provider<LangChainService>((ref) {
-  final pineConeApiKey = 'da6528c9-83f0-4a9d-bd5f-2165b9cd93d8';
-  final environment = 'gcp-starter';
-  final openAIApiKey = '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';
+  final pineConeApiKey = ''; //Enter your pinecone api key here
+  final environment = ''; //Enter your pincone environment here
+  final openAIApiKey = ''; // Enter your open AI key here
 
   final pineconeClient = PineconeClient(
     apiKey: pineConeApiKey,
@@ -106,7 +106,7 @@ class LangchainServiceImpl implements LangChainService {
       if (result.matches.isNotEmpty) {
         final concatPageContent = result.matches.map((e) {
           if (e.metadata == null) return '';
-          // check if the metadata has a 'pageContent' key
+
           if (e.metadata!.containsKey('pageContent')) {
             return e.metadata!['pageContent'];
           } else {

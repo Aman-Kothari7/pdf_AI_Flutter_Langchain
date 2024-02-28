@@ -55,21 +55,29 @@ class IndexNotifier extends _$IndexNotifier {
 
   Future<String> convertPdfToTextAndSaveInDir() async {
     try {
-      //load pdf document
-      final pdfFromAsset = await rootBundle.load('assets/pdf/sample.pdf');
-      final document =
-          PdfDocument(inputBytes: pdfFromAsset.buffer.asUint8List());
+      final List<String> pdfFiles = [
+        'assets/pdf/sample.pdf',
+        'assets/pdf/B027_ML_Exp4.pdf',
+      ];
 
-      String text = PdfTextExtractor(document).extractText();
+      final StringBuffer allText = StringBuffer();
+      for (String filePath in pdfFiles) {
+        final pdfFromAsset = await rootBundle.load(filePath);
+        final document =
+            PdfDocument(inputBytes: pdfFromAsset.buffer.asUint8List());
+
+        String text = PdfTextExtractor(document).extractText();
+        allText.write(text);
+        document.dispose();
+      }
+
       final localPath = await _localPath;
       File file = File('$localPath/output.txt');
-      final res = await file.writeAsString(text);
-
-      document.dispose();
+      final res = await file.writeAsString(allText.toString());
 
       return res.path;
     } catch (e) {
-      throw Exception('Error converting pdf to text');
+      throw Exception('Error converting pdfs to text');
     }
   }
 
